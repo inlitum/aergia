@@ -17,8 +17,8 @@ export default class CountryReligions extends BaseSchema {
             table.timestamp ('updated_at', {useTz: true})
 
             table.primary(['id', 'country_id', 'religion_id', 'user_id']);
-            table.foreign(['country_id', 'user_id']).references(['id', 'user_id']).inTable('hera.countries');
-            table.foreign(['religion_id', 'user_id']).references(['id', 'user_id']).inTable('hera.religions');
+            table.foreign(['country_id', 'user_id']).references(['id', 'user_id']).inTable('countries');
+            table.foreign(['religion_id', 'user_id']).references(['id', 'user_id']).inTable('religions');
         })
     }
 

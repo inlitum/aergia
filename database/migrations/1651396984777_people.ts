@@ -7,7 +7,7 @@ export default class People extends BaseSchema {
         this.schema.createTable (this.tableName, (table) => {
             table.increments ('id');
             /* Relationships */
-            table.integer ('user_id').unsigned ().references ('id').inTable ('public.users');
+            table.integer ('user_id').unsigned ().references ('id').inTable ('users');
             table.integer ('home_settlement_id').unsigned ();
             table.integer ('religion_id').unsigned ();
             table.integer ('current_settlement_id').unsigned();

@@ -6,7 +6,7 @@ export default class Settlements extends BaseSchema {
     public async up () {
         this.schema.createTable (this.tableName, (table) => {
             table.increments ('id');
-            table.integer ('user_id').unsigned ().references ('id').inTable ('public.users');
+            table.integer ('user_id').unsigned ().references ('id').inTable ('users');
             table.integer ('district_id').unsigned ();
             table.string ('entity_id', 16).unique ();
 
@@ -17,7 +17,7 @@ export default class Settlements extends BaseSchema {
             table.timestamp ('updated_at', {useTz: true})
 
             table.primary (['id', 'user_id']);
-            table.foreign (['district_id', 'user_id']).references (['id', 'user_id']).inTable ('hera.districts');
+            table.foreign (['district_id', 'user_id']).references (['id', 'user_id']).inTable ('districts');
         })
     }
 

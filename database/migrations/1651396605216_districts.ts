@@ -17,7 +17,7 @@ export default class Districts extends BaseSchema {
             table.timestamp ('updated_at', {useTz: true})
 
             table.primary(['id', 'user_id']);
-            table.foreign(['country_id', 'user_id']).references(['id', 'user_id']).inTable('hera.countries');
+            table.foreign(['country_id', 'user_id']).references(['id', 'user_id']).inTable('countries');
         })
     }
 
