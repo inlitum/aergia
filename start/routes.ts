@@ -33,6 +33,6 @@ Route.group (() => {
     Route.post ('register', 'AuthController.register');
 })
 
-Route.get('/', () => {
-    return 'Hello World';
+Route.get('/', async ({ view}) => {
+    return await view.render('welcome', {greeting: 'Hello'});
 })
