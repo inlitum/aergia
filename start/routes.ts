@@ -1,5 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route';
 
+
 Route.group (() => {
     // Accounts
     Route.group (() => {
@@ -31,8 +32,8 @@ Route.group (() => {
 Route.group (() => {
     Route.post ('login', 'AuthController.login');
     Route.post ('register', 'AuthController.register');
-})
+}).prefix('auth');
 
-Route.get('/', async ({ view}) => {
-    return await view.render('welcome', {greeting: 'Hello'});
+Route.get('/', async ({view}) => {
+    return await view.render('welcome', {});
 })
