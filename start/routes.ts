@@ -20,6 +20,6 @@ import Route from '@ioc:Adonis/Core/Route';
 //
 Route.post      ('tests', 'TestsController.create');
 Route.get       ('tests', 'TestsController.index');
-Route.get('/', async ({view}) => {
-    return await view.render('welcome', {});
-})
+// Route.get('/', async ({view}) => {
+//     return await view.render('welcome', {});
+// })
