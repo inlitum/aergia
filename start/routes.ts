@@ -16,8 +16,8 @@ Route.delete    ('transaction/:id', 'TransactionsController.destroy').middleware
 Route.post      ('login', 'AuthController.login');
 Route.post      ('register', 'AuthController.register');
 
-Route.post      ('religions', 'ReligionController.create');
-Route.get       ('religions', 'ReligionController.index');
+Route.post      ('religions', 'ReligionsController.create');
+Route.get       ('religions', 'ReligionsController.index');
 Route.get('/', async ({view}) => {
     return await view.render('welcome', {});
 })
