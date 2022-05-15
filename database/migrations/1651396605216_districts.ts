@@ -4,7 +4,7 @@ export default class Districts extends BaseSchema {
     protected tableName = 'districts'
 
     public async up () {
-        this.schema.withSchema('hera').createTable (this.tableName, (table) => {
+        this.schema.createTable (this.tableName, (table) => {
             table.increments ('id');
             table.integer ('user_id').unsigned ().references ('id').inTable ('public.users');
             table.integer ('country_id').unsigned ();

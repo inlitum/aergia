@@ -4,7 +4,7 @@ export default class CountryReligions extends BaseSchema {
     protected tableName = 'country_religions'
 
     public async up () {
-        this.schema.withSchema('hera').createTable (this.tableName, (table) => {
+        this.schema.createTable (this.tableName, (table) => {
             table.increments ('id');
             table.integer ('country_id');
             table.integer ('religion_id');

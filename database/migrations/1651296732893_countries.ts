@@ -4,7 +4,7 @@ export default class Countries extends BaseSchema {
     protected tableName = 'countries'
 
     public async up () {
-        this.schema.withSchema('hera').createTable (this.tableName, (table) => {
+        this.schema.createTable (this.tableName, (table) => {
             table.increments ('id');
             table.integer('user_id').unsigned().references('id').inTable('public.users');
             table.string('entity_id', 16).unique();
