@@ -21,3 +21,7 @@ Route.get       ('tests', 'TestsController.index');
 // Route.get('/', async ({view}) => {
 //     return await view.render('welcome', {});
 // })
+
+Route.get('/', () => {
+    return 'Hello World';
+});
