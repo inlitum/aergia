@@ -17,13 +17,25 @@ import Route           from '@ioc:Adonis/Core/Route';
 // Route.post      ('register', 'AuthController.register');
 // //
 
-Route.get('/tests', async () => {
-    return 'test1'
-})
-Route.post('/tests', async () => {
-    return 'test2'
-})
+Route.group(() => {
+    Route.get('test', () => {
+        return {
+            status: 200,
+            data: {
+                message: 'Get test',
+            },
+        };
+    });
+    Route.post('test', () => {
+        return {
+            status: 200,
+            data: {
+                message: 'Post test',
+            },
+        };
+    });
+}).prefix('api/questionnaire');
 
-Route.get('/', () => {
+Route.get('', () => {
     return 'Hello World';
 });
