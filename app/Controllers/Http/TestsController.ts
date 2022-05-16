@@ -1,28 +1,31 @@
-// import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
-import { schema } from '@ioc:Adonis/Core/Validator';
-import Test       from 'App/Models/Test';
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class TestsController {
+  public async index({}: HttpContextContract) {
+      return 'Test'
+  }
 
-    public async index ({}) {
-        return await Test.all();
-    }
+  public async create({}: HttpContextContract) {
+      return 'Test 2'
+  }
 
-    public async create ({request}) {
+  public async store({}: HttpContextContract) {
+      return 'Test 3'
+  }
 
-        const testSchema = schema.create ({
-            name: schema.string ()
-        });
+  public async show({}: HttpContextContract) {
+      return 'Test 4'
+  }
 
-        let payload = await request.validate ({ schema: testSchema });
+  public async edit({}: HttpContextContract) {
+      return 'Test 5'
+  }
 
-        let test = new Test();
-        test.name = payload.name;
+  public async update({}: HttpContextContract) {
+      return 'Test 6'
+  }
 
-        await test.save();
-
-        return test;
-    }
-
+  public async destroy({}: HttpContextContract) {
+      return 'Test 7'
+  }
 }
