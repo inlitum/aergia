@@ -1,7 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route';
 
-
-
 // Route.get('/api/accounts', 'AccountsController.index').middleware('auth:api');
 //
 // Route.get       ('accounts', 'AccountsController.index').middleware('auth:api');
@@ -17,7 +15,7 @@ import Route from '@ioc:Adonis/Core/Route';
 //
 // Route.post      ('login', 'AuthController.login');
 // Route.post      ('register', 'AuthController.register');
-//
+// //
 Route.post      ('tests', 'TestsController.create');
 Route.get       ('tests', 'TestsController.index');
 // Route.get('/', async ({view}) => {
