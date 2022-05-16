@@ -1,5 +1,4 @@
 import Route           from '@ioc:Adonis/Core/Route';
-import TestsController from 'App/Controllers/Http/TestsController';
 
 // Route.get('/api/accounts', 'AccountsController.index').middleware('auth:api');
 //
@@ -18,11 +17,11 @@ import TestsController from 'App/Controllers/Http/TestsController';
 // Route.post      ('register', 'AuthController.register');
 // //
 
-Route.get('/tests', async (ctx) => {
-    return new TestsController().index(ctx);
+Route.get('/tests', async () => {
+    return 'test1'
 })
-Route.post('/tests', async (ctx) => {
-    return new TestsController().create(ctx);
+Route.post('/tests', async () => {
+    return 'test2'
 })
 
 Route.get('/', () => {
