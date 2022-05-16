@@ -16,7 +16,7 @@ import Route from '@ioc:Adonis/Core/Route';
 // Route.post      ('login', 'AuthController.login');
 // Route.post      ('register', 'AuthController.register');
 // //
-Route.resource('tests', 'TestsController');
+Route.resource('tests', 'TestsController').apiOnly();
 
 // Route.get('/', async ({view}) => {
 //     return await view.render('welcome', {});
