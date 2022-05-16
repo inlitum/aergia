@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class TestsController {
-    // public async index ( {}: HttpContextContract ) {
-    //     return 'Test'
-    // }
+    public async index ( {}: HttpContextContract ) {
+        return 'Test'
+    }
 
     public async create ( {}: HttpContextContract ) {
         return 'Test 2'

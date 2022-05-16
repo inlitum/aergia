@@ -1,4 +1,5 @@
-import Route from '@ioc:Adonis/Core/Route';
+import Route           from '@ioc:Adonis/Core/Route';
+import TestsController from 'App/Controllers/Http/TestsController';
 
 // Route.get('/api/accounts', 'AccountsController.index').middleware('auth:api');
 //
@@ -16,11 +17,13 @@ import Route from '@ioc:Adonis/Core/Route';
 // Route.post      ('login', 'AuthController.login');
 // Route.post      ('register', 'AuthController.register');
 // //
-Route.resource('tests', 'TestsController').apiOnly();
 
-// Route.get('/', async ({view}) => {
-//     return await view.render('welcome', {});
-// })
+Route.get('/tests', async (ctx) => {
+    return new TestsController().index(ctx);
+})
+Route.post('/tests', async (ctx) => {
+    return new TestsController().create(ctx);
+})
 
 Route.get('/', () => {
     return 'Hello World';
