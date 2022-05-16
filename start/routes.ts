@@ -28,7 +28,7 @@ Route.group(() => {
             },
         };
     });
-    Route.post('test', () => {
+    Route.post('test', ({request}) => {
         Logger.info(request.method());
         return {
             status: 200,
