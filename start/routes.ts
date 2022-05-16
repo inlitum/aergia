@@ -1,4 +1,5 @@
-import Route           from '@ioc:Adonis/Core/Route';
+import Route   from '@ioc:Adonis/Core/Route';
+import Logger  from '@ioc:Adonis/Core/Logger'
 
 // Route.get('/api/accounts', 'AccountsController.index').middleware('auth:api');
 //
@@ -18,7 +19,8 @@ import Route           from '@ioc:Adonis/Core/Route';
 // //
 
 Route.group(() => {
-    Route.get('test', () => {
+    Route.get('test', ({request}) => {
+        Logger.info(request.method());
         return {
             status: 200,
             data: {
@@ -27,6 +29,7 @@ Route.group(() => {
         };
     });
     Route.post('test', () => {
+        Logger.info(request.method());
         return {
             status: 200,
             data: {
