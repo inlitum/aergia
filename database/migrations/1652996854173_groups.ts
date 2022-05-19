@@ -1,22 +1,22 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import BaseSchema from '@ioc:Adonis/Lucid/Schema';
 
 export default class Groups extends BaseSchema {
-    protected tableName = 'groups'
+    protected tableName = 'groups';
 
     public async up () {
-        this.schema.createTable (this.tableName, ( table ) => {
+        this.schema.createTable (this.tableName, (table) => {
             table.increments ('group_id');
             table.string ('name');
 
             /**
              * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
              */
-            table.timestamp ('created_at', { useTz: true })
-            table.timestamp ('updated_at', { useTz: true })
-        })
+            table.timestamp ('created_at', { useTz: true });
+            table.timestamp ('updated_at', { useTz: true });
+        });
     }
 
     public async down () {
-        this.schema.dropTable (this.tableName)
+        this.schema.dropTable (this.tableName);
     }
 }

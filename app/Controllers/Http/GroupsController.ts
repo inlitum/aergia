@@ -1,3 +1,4 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class GroupsController {}
+export default class GroupsController {
+}
