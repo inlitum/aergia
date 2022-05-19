@@ -5,9 +5,6 @@ export class Shared {
 }
 
 export function hasGroup (groups: Group[], groupName: string | string[]): boolean {
-
-    console.log (groups);
-
     let hasMatch = false;
 
     if (typeof groupName !== 'string') {
