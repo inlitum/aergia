@@ -25,5 +25,9 @@ echo "Migrating database"
 node ace migration:run
 node ace db:seed
 
+echo "Building documentation..."
+npm install -g redoc-cli
+redoc-cli build -o .\resources\views\api.edge ..\docs\aergia.yaml
+
 echo "Starting Aergia"
 pm2 start server.js --name aergia
