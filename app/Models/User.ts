@@ -20,8 +20,12 @@ export default class User extends BaseModel {
     @column ()
     public rememberMeToken: string
 
-    @manyToMany(() => Group, {
-        pivotTable: 'user_groups'
+    @manyToMany (() => Group, {
+        pivotTable:               'user_groups'
+        , localKey:               'user_id'
+        , pivotForeignKey:        'user_id'
+        , relatedKey:             'group_id'
+        , pivotRelatedForeignKey: 'group_id',
     })
     public userGroups: ManyToMany<typeof Group>;
 
