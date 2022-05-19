@@ -20,7 +20,7 @@ export default class UsersController {
         // Boring old pagination stuff.
         let offset         = request.header ('offset') || 1;
         let perPage        = request.header ('perPage') || 10;
-        let orderBy        = request.header ('orderBy') || 'name';
+        let orderBy        = request.header ('orderBy') || 'username';
         let orderDirection = request.header ('orderDirection') || 'asc';
 
         return await User.query ()
