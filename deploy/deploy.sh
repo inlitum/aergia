@@ -11,16 +11,16 @@ cd current
 echo "Installing npm dependencies"
 npm i
 
-echo "Migrating database"
-node ace migration:run
-node ace db:seed
-
 echo "Building Aergia"
 node ace build --prod
 cd build
 
 echo "Installing production dependencies"
 npm ci --production
+
+echo "Migrating database"
+node ace migration:run
+node ace db:seed
 
 echo "Copying env file"
 cp ../../.env ./.env
