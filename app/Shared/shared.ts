@@ -22,5 +22,7 @@ export function hasGroup (groups: Group[], groupName: string | string[]): boolea
 }
 
 function internalHasGroup (groups: Group[], groupName: string): boolean {
-    return groups.filter (group => group.name === groupName).length > 0;
+    const matching = groups.filter (group => group.name === groupName);
+    console.log (matching);
+    return matching.length > 0;
 }

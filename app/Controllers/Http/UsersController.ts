@@ -14,7 +14,7 @@ export default class UsersController {
         }
 
         if (!_hasGroup (user.userGroups, ['admin_read', 'admin_write'])) {
-            return response.unauthorized ();
+            return response.unauthorized ('User not an admin');
         }
 
         // Boring old pagination stuff.
