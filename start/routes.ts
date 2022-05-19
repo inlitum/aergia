@@ -37,7 +37,7 @@ Route.group(() => {
             },
         };
     });
-}).prefix('api/questionnaire');
+});
 
 Route.get('', () => {
     return 'Hello World';
