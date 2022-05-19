@@ -13,9 +13,9 @@
 |
 */
 
-import Logger                  from '@ioc:Adonis/Core/Logger'
-import HttpExceptionHandler    from '@ioc:Adonis/Core/HttpExceptionHandler'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Logger from '@ioc:Adonis/Core/Logger'
+import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
   protected statusPages = {
@@ -28,11 +28,11 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     super(Logger)
   }
 
-  public async handle (error: any, ctx: HttpContextContract) {
-      if (error.code === 'E_UNAUTHORIZED_ACCESS') {
-        return ctx.response.status(401).send(error.message);
-      }
+  public async handle(error: any, ctx: HttpContextContract) {
+    if (error.code === 'E_UNAUTHORIZED_ACCESS') {
+      return ctx.response.status(401).send(error.message)
+    }
 
-      return super.handle(error, ctx);
+    return super.handle(error, ctx)
   }
 }

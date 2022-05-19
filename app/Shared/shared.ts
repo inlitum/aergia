@@ -1,2 +1,1 @@
-export class Shared {
-}
+export class Shared {}
