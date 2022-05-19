@@ -19,10 +19,6 @@ export default class AuthController {
 
         const user = await User.query ().where ('email', email).firstOrFail ();
 
-        await user.load ('userGroups');
-
-        console.log (user.userGroups);
-
         if (!(await Hash.verify (user.password, password))) {
             return response.badRequest ('Invalid credentials');
         }
