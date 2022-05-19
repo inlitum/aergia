@@ -24,7 +24,7 @@ export default class User extends BaseModel {
         pivotTable:               'user_groups'
         , localKey:               'id'
         , pivotForeignKey:        'user_id'
-        , relatedKey:             'id'
+        , relatedKey:             'group_id'
         , pivotRelatedForeignKey: 'group_id',
     })
     public userGroups: ManyToMany<typeof Group>;
