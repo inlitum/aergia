@@ -1,26 +1,26 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class Accounts extends BaseSchema {
-  protected tableName = 'accounts'
+    protected tableName = 'accounts'
 
-  public async up() {
-    this.schema.createTable(this.tableName, (table) => {
-      table.increments('account_id')
-      table.string('name')
-      table.float('current_amount')
-      table.float('starting_amount')
-      table.integer('user_id').unsigned().references('users.user_id')
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+    public async up () {
+        this.schema.createTable (this.tableName, (table) => {
+            table.increments ('account_id')
+            table.string ('name')
+            table.float ('current_amount')
+            table.float ('starting_amount')
+            table.integer ('user_id').unsigned ().references ('users.user_id')
+            /**
+             * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
+             */
+            table.timestamp ('created_at', { useTz: true })
+            table.timestamp ('updated_at', { useTz: true })
 
-      table.primary(['id', 'user_id'])
-    })
-  }
+            table.primary (['account_id', 'user_id'])
+        })
+    }
 
-  public async down() {
-    this.schema.dropTable(this.tableName)
-  }
+    public async down () {
+        this.schema.dropTable (this.tableName)
+    }
 }
