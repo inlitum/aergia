@@ -5,7 +5,7 @@ import User from 'App/Models/User'
 import Transaction from 'App/Models/Transaction'
 
 export default class Account extends BaseModel {
-  @column({ isPrimary: true })
+  @column({ isPrimary: true, columnName: 'account_id' })
   public id: number
 
   @column()

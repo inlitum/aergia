@@ -1,35 +1,41 @@
-import { DateTime } from 'luxon'
+import { DateTime }                                                    from 'luxon'
 import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import Account from 'App/Models/Account'
-import Transaction from 'App/Models/Transaction'
+import Account                                                         from 'App/Models/Account'
+import Transaction                                                     from 'App/Models/Transaction'
+import Group                                                           from 'App/Models/Group';
 
 export default class User extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number
+    @column ({ isPrimary: true, columnName: 'user_id' })
+    public id: number
 
-  @column()
-  public username: string
+    @column ()
+    public username: string
 
-  @column()
-  public email: string
+    @column ()
+    public email: string
 
-  @column()
-  public password: string
+    @column ()
+    public password: string
 
-  @column()
-  public rememberMeToken: string
+    @column ()
+    public rememberMeToken: string
 
-  @manyToMany(() => Account, {
-    pivotTable: 'user_accounts',
-  })
-  public accounts: ManyToMany<typeof Account>
+    @manyToMany(() => Group, {
+        pivotTable: 'user_groups'
+    })
+    public userGroups: ManyToMany<typeof Group>;
 
-  @hasMany(() => Transaction, {})
-  public transactions: HasMany<typeof Transaction>
+    @manyToMany (() => Account, {
+        pivotTable: 'user_accounts',
+    })
+    public accounts: ManyToMany<typeof Account>
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+    @hasMany (() => Transaction, {})
+    public transactions: HasMany<typeof Transaction>
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+    @column.dateTime ({ autoCreate: true })
+    public createdAt: DateTime
+
+    @column.dateTime ({ autoCreate: true, autoUpdate: true })
+    public updatedAt: DateTime
 }
