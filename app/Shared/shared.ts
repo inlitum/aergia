@@ -5,21 +5,20 @@ export class Shared {
 }
 
 export function hasGroup (groups: Group[], groupName: string | string[]): boolean {
-    let hasMatch = false;
+    const toCheck: string[] = [];
 
-    if (typeof groupName !== 'string') {
-        groupName.forEach (name => {
-            hasMatch = internalHasGroup (groups, name);
-        });
+    if (typeof groupName === 'string') {
+        toCheck.push (groupName);
     } else {
-        hasMatch = internalHasGroup (groups, groupName);
+        toCheck.concat (groupName);
     }
 
-    return hasMatch;
-}
-
-function internalHasGroup (groups: Group[], groupName: string): boolean {
-    const matching = groups.filter (group => group.name === groupName);
-    console.log (matching);
-    return matching.length > 0;
+    return groups.filter (group => {
+        for (let i = 0; i < groupName.length; i++) {
+            if (group.name === groupName[ i ]) {
+                return true;
+            }
+        }
+        return false;
+    }).length > 0;
 }
