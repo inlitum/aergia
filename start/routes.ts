@@ -1,6 +1,7 @@
 import Route from '@ioc:Adonis/Core/Route';
 
 Route.group (() => {
+         Route.get ('api', async ({ view }) => {return await view.render ('api');});
          Route.get ('api/admin/users', 'UsersController.index');
          // Route.post('api/admin/users', 'UsersController.index');
          // Route.get('api/admin/groups', 'GroupsController.index');
