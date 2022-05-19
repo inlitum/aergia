@@ -18,12 +18,12 @@ cd build
 echo "Installing production dependencies"
 npm ci --production
 
+echo "Copying env file"
+cp ../../.env ./.env
+
 echo "Migrating database"
 node ace migration:run
 node ace db:seed
-
-echo "Copying env file"
-cp ../../.env ./.env
 
 echo "Starting Aergia"
 pm2 start server.js --name aergia
