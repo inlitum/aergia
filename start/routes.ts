@@ -7,7 +7,7 @@ Route.group (() => {
                  try {
                      docs = await view.render ('docs');
                  } catch (e) {
-                     return response.internalServerError ();
+                     return response.internalServerError (e);
                  }
                  return docs;
              },
