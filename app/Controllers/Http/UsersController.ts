@@ -5,18 +5,23 @@ import { hasGroup, hasGroup as _hasGroup } from 'App/Shared/shared';
 import { rules, schema }                   from '@ioc:Adonis/Core/Validator';
 import Hash                                from '@ioc:Adonis/Core/Hash';
 import { DateTime }                        from 'luxon';
+import Logger                              from '@ioc:Adonis/Core/Logger';
 
 export default class UsersController {
     public async index ({ auth, request, response }) {
         let userId = auth.use ('api').user.id;
 
+        Logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
+
         let user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
         if (!user) {
+            Logger.warn (`User-Index: Current user does not exist.`);
             return response.unauthorized ();
         }
 
         if (!_hasGroup (user.userGroups, ['admin_read', 'admin_write'])) {
+            Logger.warn (`User-Index: Current user is not an admin user.`);
             return response.unauthorized ('User not an admin');
         }
 
@@ -43,6 +48,7 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
+        Logger.info (`User-Index: Attempting to get user [${ requestUserId }] using account [${ currentUserId }]`);
         if (hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']) && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
@@ -50,6 +56,7 @@ export default class UsersController {
         let requestUser = await User.find (requestUserId);
 
         if (!requestUser) {
+            Logger.info (`User-Index: User with id [${ requestUserId }] does not exist.`);
             return response.notFound ();
         }
 
