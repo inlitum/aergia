@@ -11,14 +11,14 @@ cd current
 echo "=+=+=+=+=+=+=+= Installing npm dependencies =+=+=+=+=+=+=+="
 npm i
 
+echo "=+=+=+=+=+=+=+= Building documentation =+=+=+=+=+=+=+="
+redoc-cli build -o ./resources/views/docs.edge ./docs/aergia.yaml
+
 echo "=+=+=+=+=+=+=+= Building Aergia =+=+=+=+=+=+=+="
 node ace build --prod
 
-echo "=+=+=+=+=+=+=+= Building documentation =+=+=+=+=+=+=+="
-cd build
-redoc-cli build -o ./resources/views/docs.edge ../docs/aergia.yaml
-
 echo "=+=+=+=+=+=+=+= Installing production dependencies =+=+=+=+=+=+=+="
+cd build
 npm ci --production
 
 echo "=+=+=+=+=+=+=+= Copying env file =+=+=+=+=+=+=+="
