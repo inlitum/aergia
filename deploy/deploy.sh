@@ -15,12 +15,8 @@ echo "Building Aergia"
 node ace build --prod
 
 echo "Building documentation..."
-cd docs
-npm i
-redoc-cli build -o ./resources/views/docs.edge ../build/docs/aergia.yaml
-cd ../
-
 cd build
+redoc-cli build -o ./resources/views/docs.edge ../docs/aergia.yaml
 
 echo "Installing production dependencies"
 npm ci --production
