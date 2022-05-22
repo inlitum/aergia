@@ -1,0 +1,56 @@
+components:
+  parameters:
+    PageQueryParam:
+      in: query
+      name: page
+      schema:
+        type: integer
+      required: false
+      description: Search results are always paged.
+        The starting page of the results is given by this field.
+      default: 1
+    PerPageQueryParam:
+      in: query
+      name: perPage
+      schema:
+        type: integer
+      required: false
+      description: Search results are always paged.
+        The total number of results per page.
+      default: 30
+    OrderByQueryParam:
+      in: query
+      name: orderBy
+      schema:
+        type: string
+      required: false
+      description: Search results are always paged.
+        The table column used to order the results.
+      default: created_at
+    OrderDirectionQueryParams:
+      in: query
+      name: orderDirection
+      schema:
+        type: string
+      required: false
+      description: Search results are always paged.
+        The direction the orderBy column should be ordered.
+      default: desc
+
+  schemas:
+    CreatedAtProperty:
+      properties:
+        createdAd:
+          type: DateTime
+          readOnly: true
+          example: 2022-05-19T22:15:37.781+00:00
+          description: >
+            The date and time the entry was created.
+    UpdatedAtProperty:
+      properties:
+        updatedAt:
+          type: DateTime
+          readOnly: true
+          example: 2022-05-19T22:15:37.781+00:00
+          description: >
+            The date and time the entry was last updated.

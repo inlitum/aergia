@@ -102,10 +102,29 @@ paths:
                   token:
                     type: string
 
-  /users:
+  /api/admin/users:
     get:
       summary: Returns a list of users.
+      tags:
+        - User
       description: Optional extended description in Markdown.
+      responses:
+        '200':
+          description: OK
+  /api/admin/users/:id:
+    get:
+      summary: Returns a single user.
+      tags:
+        - User
+      description: >
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: Updates a user.
+      tags:
+        - User
+      description: >
       responses:
         '200':
           description: OK

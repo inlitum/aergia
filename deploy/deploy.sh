@@ -13,6 +13,13 @@ npm i
 
 echo "Building Aergia"
 node ace build --prod
+
+echo "Building documentation..."
+cd docs
+npm i
+redoc-cli build -o ./resources/views/docs.edge ../build/docs/aergia.yaml
+cd ../
+
 cd build
 
 echo "Installing production dependencies"
@@ -24,10 +31,6 @@ cp ../../.env ./.env
 echo "Migrating database"
 node ace migration:run
 node ace db:seed
-
-echo "Building documentation..."
-npm install -g redoc-cli
-redoc-cli build -o ./resources/views/docs.edge ../docs/aergia.yaml
 
 echo "Starting Aergia"
 pm2 start server.js --name aergia

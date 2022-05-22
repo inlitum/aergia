@@ -1,0 +1,60 @@
+components:
+  properties:
+    UserIdParameter:
+      in: path
+      name: userId
+      schema:
+        type: integer
+      example: 4513
+      description: >
+        The user's unique internal ID, as returned
+        in the `id` column of the user search or single
+        user query.
+
+  schemas:
+    UserIdProperty:
+      properties:
+        id:
+          type: integer
+          required: true
+          readOnly: true
+          example: 4513
+          description: >
+            The internal unique ID linked to a given User.
+    UsernameProperty:
+      properties:
+        username:
+          type: string
+          required: true
+          example: JohnDoe
+          description: >
+            The unique username for a User.
+    EmailProperty:
+      properties:
+        email:
+          type: string
+          required: true
+          example: john@doe.com
+          description: >
+            The unique email for a User.
+    PasswordProperty:
+      properties:
+        password:
+          type: string
+          required: true
+          example: j0hnd03
+          description: >
+            The password used to login to a User's account.
+    RememberMeTokenProperty:
+      properties:
+        rememberMeToken:
+          type: string
+          required: false
+          example: idk
+          description: >
+            IDK
+    UserGroupsProperty:
+      properties:
+        userGroups:
+          type: array
+
