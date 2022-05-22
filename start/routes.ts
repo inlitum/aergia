@@ -2,8 +2,14 @@ import Route from '@ioc:Adonis/Core/Route';
 
 Route.group (() => {
          // Api documentation path
-         Route.get ('api', async ({ view }) => {
-                 return await view.render ('docs');
+         Route.get ('api', async ({ view, response }) => {
+                 let docs;
+                 try {
+                     docs = await view.render ('docs');
+                 } catch (e) {
+                     return response.internalServerError ();
+                 }
+                 return docs;
              },
          );
          // Users
