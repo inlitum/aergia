@@ -1,7 +1,6 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import User         from 'App/Models/User';
-import { hasGroup } from 'App/Shared/shared';
 import Group        from 'App/Models/Group';
 import { schema }   from '@ioc:Adonis/Core/Validator';
 import { DateTime } from 'luxon';
@@ -13,7 +12,7 @@ export default class GroupsController {
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !hasGroup (user.userGroups, ['admin_read', 'admin_write'])) {
+        if (!user || !(user.hasAdminRead ())) {
             return response.unauthorized ();
         }
 
@@ -33,7 +32,7 @@ export default class GroupsController {
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !hasGroup (user.userGroups, 'admin_write')) {
+        if (!user || !(user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
@@ -68,7 +67,7 @@ export default class GroupsController {
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !hasGroup (user.userGroups, ['admin_read', 'admin_write'])) {
+        if (!user || !(user.hasAdminRead ())) {
             return response.unauthorized ();
         }
 
@@ -89,7 +88,7 @@ export default class GroupsController {
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !hasGroup (user.userGroups, 'admin_write')) {
+        if (!user || !(user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
@@ -130,7 +129,7 @@ export default class GroupsController {
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !hasGroup (user.userGroups, 'admin_write')) {
+        if (!user || !(user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 

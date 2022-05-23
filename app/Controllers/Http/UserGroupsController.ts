@@ -1,9 +1,8 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import User         from 'App/Models/User';
-import { hasGroup } from 'App/Shared/shared';
-import { schema }   from '@ioc:Adonis/Core/Validator';
-import Group        from 'App/Models/Group';
+import User       from 'App/Models/User';
+import { schema } from '@ioc:Adonis/Core/Validator';
+import Group      from 'App/Models/Group';
 
 export default class UserGroupsController {
     public async create ({ auth, request, response }) {
@@ -15,7 +14,7 @@ export default class UserGroupsController {
             return response.notFound ();
         }
 
-        if (!hasGroup (currentUser.userGroups, 'admin_write')) {
+        if (!(currentUser.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
@@ -56,7 +55,7 @@ export default class UserGroupsController {
             return response.notFound ();
         }
 
-        if (!hasGroup (currentUser.userGroups, 'admin_write')) {
+        if (!(currentUser.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
