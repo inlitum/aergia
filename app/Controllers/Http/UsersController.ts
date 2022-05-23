@@ -55,6 +55,8 @@ export default class UsersController {
         let requestUser = await User.find (requestUserId);
 
         this.logger.info (requestUser);
+        this.logger.warn ('Something bad has happened here...');
+        this.logger.error ('Something even worse has happened...');
 
         if (!requestUser) {
             return response.notFound ();
