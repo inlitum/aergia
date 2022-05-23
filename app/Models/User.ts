@@ -1,9 +1,8 @@
-import { DateTime }                                                              from 'luxon';
-import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
-import Account                                                                   from 'App/Models/Account';
-import Transaction                                                               from 'App/Models/Transaction';
-import Group                                                                     from 'App/Models/Group';
-import { hasGroup }                                                              from 'App/Shared/shared';
+import { DateTime }                                                    from 'luxon';
+import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import Account                                                         from 'App/Models/Account';
+import Transaction                                                     from 'App/Models/Transaction';
+import Group                                                           from 'App/Models/Group';
 
 export default class User extends BaseModel {
     @column ({ isPrimary: true, columnName: 'user_id' })
@@ -43,9 +42,4 @@ export default class User extends BaseModel {
 
     @column.dateTime ({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime;
-
-    @computed ()
-    public get isAdmin () {
-        return hasGroup (this.userGroups, ['admin_read', 'admin_write']);
-    }
 }
