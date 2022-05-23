@@ -38,7 +38,7 @@ export default class UsersController {
     public async read ({ auth, request, response }) {
         let currentUserId = auth.use ('api').user.id;
 
-        Logger.info ('testing that this is actually');
+        console.log ('test');
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
