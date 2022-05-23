@@ -47,7 +47,6 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
-        Logger.info (`User-Index: Attempting to get user [${ requestUserId }] using account [${ currentUserId }]`);
         if (!hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']) && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
@@ -55,7 +54,6 @@ export default class UsersController {
         let requestUser = await User.find (requestUserId);
 
         if (!requestUser) {
-            Logger.info (`User-Index: User with id [${ requestUserId }] does not exist.`);
             return response.notFound ();
         }
 
@@ -69,10 +67,11 @@ export default class UsersController {
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
         if (!currentUser) {
-            return response.notFound ();
+            return response.unauthorized ();
         }
 
         if (!hasGroup (currentUser.userGroups, 'admin_write') && currentUserId !== requestUserId) {
+            Logger.info (currentUser.userGroups.toString ());
             return response.unauthorized ();
         }
 
