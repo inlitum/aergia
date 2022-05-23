@@ -59,6 +59,6 @@ Route.group (() => {
             method = colors.white (request.method ());
     }
 
-    console.log (`${ method } ${ request.url () }`);
+    console.log (`${ method } ${ request.url () } ${ request.ip () }`);
     await next ();
 });
