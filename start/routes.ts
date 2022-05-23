@@ -39,7 +39,7 @@ Route.group (() => {
     Route.get ('/', async ({ view }) => {
         return await view.render ('welcome', {});
     });
-}).middleware (async ({ request }) => {
+}).middleware (async ({ request }, next) => {
     let method;
 
     switch (request.method ()) {
@@ -60,4 +60,5 @@ Route.group (() => {
     }
 
     console.log (`${ method } ${ request.url () }`);
+    await next ();
 });
