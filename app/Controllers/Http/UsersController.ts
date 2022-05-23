@@ -39,7 +39,9 @@ export default class UsersController {
     public async read ({ auth, request, response }) {
         let currentUserId = auth.use ('api').user.id;
 
-        let currentUser = await User.find (currentUserId);
+        Logger.info ('testing that this is actually');
+
+        let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
         if (!currentUser) {
             return response.unauthorized ();

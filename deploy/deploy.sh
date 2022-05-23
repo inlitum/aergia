@@ -19,7 +19,7 @@ node ace build --prod
 
 echo "=+=+=+=+=+=+=+= Installing production dependencies =+=+=+=+=+=+=+="
 cd build
-npm ci --production
+npm ci --omit=dev
 
 echo "=+=+=+=+=+=+=+= Copying env file =+=+=+=+=+=+=+="
 cp ../../.env ./.env
@@ -30,3 +30,5 @@ node ace db:seed
 
 echo "=+=+=+=+=+=+=+= Starting Aergia =+=+=+=+=+=+=+="
 pm2 start server.js --name aergia
+
+pm2 l

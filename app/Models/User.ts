@@ -53,10 +53,8 @@ export default class User extends BaseModel {
 
     public async hasGroup (group: string): Promise<boolean> {
         if (!this.userGroups) {
-            await this.load (this.userGroups);
-            console.log (this.userGroups);
+            return false;
         }
-
         for (let i = 0; i < this.userGroups.length; i++) {
             if (this.userGroups[ i ].name === group) {
                 return true;
