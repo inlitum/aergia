@@ -3,26 +3,24 @@
 import User         from 'App/Models/User';
 import Hash         from '@ioc:Adonis/Core/Hash';
 import { DateTime } from 'luxon';
-import createLogger from 'logging';
+import Logger       from '@ioc:Adonis/Core/Logger';
 
 export default class UsersController {
-
-    private logger = createLogger ('UsersController');
 
     public async index ({ auth, request, response }) {
         let userId = auth.use ('api').user.id;
 
-        this.logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
+        Logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
 
         let user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
         if (!user) {
-            this.logger.warn (`User-Index: Current user does not exist.`);
+            Logger.warn (`User-Index: Current user does not exist.`);
             return response.unauthorized ();
         }
 
         if (!(await user.hasAdminRead ())) {
-            this.logger.warn (`User-Index: Current user is not an admin user.`);
+            Logger.warn (`User-Index: Current user is not an admin user.`);
             return response.unauthorized ('User not an admin');
         }
 
@@ -54,10 +52,6 @@ export default class UsersController {
         }
 
         let requestUser = await User.find (requestUserId);
-
-        this.logger.info (requestUser);
-        this.logger.warn ('Something bad has happened here...');
-        this.logger.error ('Something even worse has happened...');
 
         if (!requestUser) {
             return response.notFound ();
