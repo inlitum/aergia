@@ -1,4 +1,5 @@
-import Route from '@ioc:Adonis/Core/Route';
+import Route  from '@ioc:Adonis/Core/Route';
+import Logger from '@ioc:Adonis/Core/Logger';
 
 Route.group (() => {
     Route.group (() => {
@@ -39,6 +40,6 @@ Route.group (() => {
         return await view.render ('welcome', {});
     });
 }).middleware (async ({ request }, next) => {
-    console.log (`${ request.method () } ${ request.url () } ${ request.ip () }`);
+    Logger.info (`${ request.method () } ${ request.url () } ${ request.ip () }`);
     await next ();
 });
