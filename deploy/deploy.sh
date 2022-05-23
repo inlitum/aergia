@@ -25,12 +25,10 @@ npm ci --omit=dev
 echo "=+=+=+=+=+=+=+= Copying env file =+=+=+=+=+=+=+="
 cp ../../.env ./.env
 
-echo "=+=+=+=+=+=+=+= Migrating database =+=+=+=+=+=+=+="
-if [ "$1" = "db" ]; then
+if [ "$1" = "migrate" ]; then
+  echo "=+=+=+=+=+=+=+= Migrating database =+=+=+=+=+=+=+="
   node ace migration:run
   node ace db:seed
-else
-    echo "Strings are not equal."
 fi
 
 echo "=+=+=+=+=+=+=+= Starting Aergia =+=+=+=+=+=+=+="
