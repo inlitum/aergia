@@ -54,6 +54,8 @@ export default class UsersController {
 
         let requestUser = await User.find (requestUserId);
 
+        this.logger.info (requestUser);
+
         if (!requestUser) {
             return response.notFound ();
         }
