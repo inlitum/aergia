@@ -47,7 +47,7 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
-        if (!currentUser.hasAdminRead () && currentUserId !== requestUserId) {
+        if (!await currentUser.hasAdminRead () && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
 
