@@ -32,6 +32,6 @@ if [ "$1" = "migrate" ]; then
 fi
 
 echo "=+=+=+=+=+=+=+= Starting Aergia =+=+=+=+=+=+=+="
-pm2 start server.js --name aergia
+pm2 start server.js --name aergia --watch -- --color
 
 pm2 monit
