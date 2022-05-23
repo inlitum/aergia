@@ -1,5 +1,4 @@
-import Route  from '@ioc:Adonis/Core/Route';
-import colors from 'colors';
+import Route from '@ioc:Adonis/Core/Route';
 
 Route.group (() => {
     Route.group (() => {
@@ -40,25 +39,6 @@ Route.group (() => {
         return await view.render ('welcome', {});
     });
 }).middleware (async ({ request }, next) => {
-    let method;
-
-    switch (request.method ()) {
-        case 'GET':
-            method = colors.blue ('GET');
-            break;
-        case 'PUT':
-            method = colors.yellow ('PUT');
-            break;
-        case 'POST':
-            method = colors.green ('POST');
-            break;
-        case 'DELETE':
-            method = colors.red ('RED');
-            break;
-        default:
-            method = colors.white (request.method ());
-    }
-
-    console.log (`${ method } ${ request.url () } ${ request.ip () }`);
+    console.log (`${ request.method () } ${ request.url () } ${ request.ip () }`);
     await next ();
 });
