@@ -3,10 +3,11 @@
 import User         from 'App/Models/User';
 import Hash         from '@ioc:Adonis/Core/Hash';
 import { DateTime } from 'luxon';
-import AergiaLogger from 'App/Shared/AergiaLogger';
+import createLogger from 'logging';
 
 export default class UsersController {
-    public logger: AergiaLogger = new AergiaLogger ('UsersController');
+
+    private logger = createLogger ('UsersController');
 
     public async index ({ auth, request, response }) {
         let userId = auth.use ('api').user.id;
