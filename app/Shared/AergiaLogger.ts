@@ -11,11 +11,11 @@ export default class AergiaLogger {
     }
 
     public warn (...data: any[]) {
-        console.info (`${ this._subsystem } > warning >`, data);
+        console.warn (`${ this._subsystem } > warning >`, data);
     }
 
     public error (...data: any[]) {
-        console.info (`${ this._subsystem } > error >`, data);
+        console.error (`${ this._subsystem } > error >`, data);
     }
 
 }
