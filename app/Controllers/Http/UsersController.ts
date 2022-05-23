@@ -1,10 +1,9 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-import User                                from 'App/Models/User';
-import { hasGroup, hasGroup as _hasGroup } from 'App/Shared/shared';
-import Hash                                from '@ioc:Adonis/Core/Hash';
-import { DateTime }                        from 'luxon';
-import Logger                              from '@ioc:Adonis/Core/Logger';
+import User         from 'App/Models/User';
+import Hash         from '@ioc:Adonis/Core/Hash';
+import { DateTime } from 'luxon';
+import Logger       from '@ioc:Adonis/Core/Logger';
 
 export default class UsersController {
     public async index ({ auth, request, response }) {
@@ -19,7 +18,7 @@ export default class UsersController {
             return response.unauthorized ();
         }
 
-        if (!_hasGroup (user.userGroups, ['admin_read', 'admin_write'])) {
+        if (!(await user.hasAdminRead ())) {
             Logger.warn (`User-Index: Current user is not an admin user.`);
             return response.unauthorized ('User not an admin');
         }
@@ -49,7 +48,7 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
-        if (!await currentUser.hasAdminRead () && currentUserId !== requestUserId) {
+        if (!(await currentUser.hasAdminRead ()) && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
 
@@ -72,7 +71,7 @@ export default class UsersController {
             return response.unauthorized ();
         }
 
-        if (!hasGroup (currentUser.userGroups, 'admin_write') && currentUserId !== requestUserId) {
+        if (!(currentUser.hasAdminWrite ()) && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
 
@@ -90,6 +89,8 @@ export default class UsersController {
         requestUser.username  = username ?? requestUser.username;
         requestUser.password  = password ? await Hash.make (password) : requestUser.password;
         requestUser.updatedAt = DateTime.now ();
+
+        await requestUser.load ('userGroups');
 
         try {
             await requestUser.save ();
@@ -111,7 +112,7 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
-        if (!hasGroup (currentUser.userGroups, 'admin_write') && requestUserId !== currentUserId) {
+        if (!(currentUser.hasAdminWrite ()) && requestUserId !== currentUserId) {
             return response.unauthorized ();
         }
 

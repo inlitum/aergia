@@ -44,7 +44,7 @@ export default class User extends BaseModel {
     public updatedAt: DateTime;
 
     public async hasAdminRead (): Promise<boolean> {
-        return await this.hasGroup ('admin_read') || await this.hasAdminWrite ();
+        return await this.hasGroups (['admin_read', 'admin_write']);
     }
 
     public async hasAdminWrite (): Promise<boolean> {
