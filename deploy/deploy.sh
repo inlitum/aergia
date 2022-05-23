@@ -34,4 +34,4 @@ fi
 echo "=+=+=+=+=+=+=+= Starting Aergia =+=+=+=+=+=+=+="
 pm2 start server.js --name aergia
 
-pm2 l
+pm2 log --attach --json
