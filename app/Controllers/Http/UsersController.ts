@@ -80,16 +80,14 @@ export default class UsersController {
             return response.notFound ();
         }
 
-        let email    = request.body.email;
-        let username = request.body.username;
-        let password = request.body.password;
+        let email    = request.body ().input ('email');
+        let username = request.body ().input ('username');
+        let password = request.body ().input ('password');
 
         requestUser.email     = email ?? requestUser.email;
         requestUser.username  = username ?? requestUser.username;
         requestUser.password  = password ? await Hash.make (password) : requestUser.password;
         requestUser.updatedAt = DateTime.now ();
-
-        await requestUser.load ('userGroups');
 
         try {
             await requestUser.save ();
