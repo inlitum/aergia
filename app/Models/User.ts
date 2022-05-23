@@ -42,4 +42,35 @@ export default class User extends BaseModel {
 
     @column.dateTime ({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime;
+
+    public async hasAdminRead (): Promise<boolean> {
+        return await this.hasGroup ('admin_read') || await this.hasAdminWrite ();
+    }
+
+    public async hasAdminWrite (): Promise<boolean> {
+        return await this.hasGroup ('admin_write');
+    }
+
+    public async hasGroup (group: string): Promise<boolean> {
+        if (!this.userGroups) {
+            await this.load (this.userGroups);
+            console.log (this.userGroups);
+        }
+
+        for (let i = 0; i < this.userGroups.length; i++) {
+            if (this.userGroups[ i ].name === group) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public async hasGroups (groups: string[]): Promise<boolean> {
+        for (let i = 0; i < groups.length; i++) {
+            if (await this.hasGroup (groups[ i ])) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

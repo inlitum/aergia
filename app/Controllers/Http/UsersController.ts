@@ -39,7 +39,7 @@ export default class UsersController {
     public async read ({ auth, request, response }) {
         let currentUserId = auth.use ('api').user.id;
 
-        let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
+        let currentUser = await User.find (currentUserId);
 
         if (!currentUser) {
             return response.unauthorized ();
@@ -47,7 +47,7 @@ export default class UsersController {
 
         let requestUserId = request.params ().id;
 
-        if (!hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']) && currentUserId !== requestUserId) {
+        if (!currentUser.hasAdminRead () && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
 
@@ -71,11 +71,10 @@ export default class UsersController {
         }
 
         if (!hasGroup (currentUser.userGroups, 'admin_write') && currentUserId !== requestUserId) {
-            Logger.info (currentUser.userGroups.toString ());
             return response.unauthorized ();
         }
 
-        let requestUser = await User.query ().where ('user_id', requestUserId).first ();
+        let requestUser = await User.find (requestUserId);
 
         if (!requestUser) {
             return response.notFound ();
