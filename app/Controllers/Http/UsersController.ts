@@ -72,7 +72,7 @@ export default class UsersController {
             return response.notFound ();
         }
 
-        if (!hasGroup (currentUser.userGroups, 'admin_write') && currentUserId != requestUserId) {
+        if (!hasGroup (currentUser.userGroups, 'admin_write') && currentUserId !== requestUserId) {
             return response.unauthorized ();
         }
 
@@ -90,10 +90,6 @@ export default class UsersController {
         requestUser.username  = username ?? requestUser.username;
         requestUser.password  = password ? await Hash.make (password) : requestUser.password;
         requestUser.updatedAt = DateTime.now ();
-
-        if (!requestUser.$isDirty) {
-            return requestUser;
-        }
 
         try {
             await requestUser.save ();
