@@ -2,7 +2,6 @@
 
 import User                                from 'App/Models/User';
 import { hasGroup, hasGroup as _hasGroup } from 'App/Shared/shared';
-import { rules, schema }                   from '@ioc:Adonis/Core/Validator';
 import Hash                                from '@ioc:Adonis/Core/Hash';
 import { DateTime }                        from 'luxon';
 import Logger                              from '@ioc:Adonis/Core/Logger';
@@ -83,29 +82,18 @@ export default class UsersController {
             return response.notFound ();
         }
 
-        const userSchema = schema.create ({
-            email:    schema.string ({}, [
-                rules.email (),
-            ]),
-            password: schema.string (),
-            username: schema.string (),
-        });
+        let email    = request.body.email;
+        let username = request.body.username;
+        let password = request.body.password;
 
-        let payload;
-        try {
-            payload = await request.validate ({
-                schema: userSchema,
-            });
-        } catch (e) {
-            return response.badRequest (e);
-        }
-
-        let password = await Hash.make (payload.password);
-
-        requestUser.email     = payload.email;
-        requestUser.username  = payload.username;
-        requestUser.password  = password;
+        requestUser.email     = email ?? requestUser.email;
+        requestUser.username  = username ?? requestUser.username;
+        requestUser.password  = password ? await Hash.make (password) : requestUser.password;
         requestUser.updatedAt = DateTime.now ();
+
+        if (!requestUser.$isDirty) {
+            return requestUser;
+        }
 
         try {
             await requestUser.save ();
