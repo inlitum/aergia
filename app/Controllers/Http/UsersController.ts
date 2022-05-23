@@ -50,7 +50,7 @@ export default class UsersController {
 
         Logger.info (`User-Index: Attempting to get user [${ requestUserId }] using account [${ currentUserId }]`);
         if (hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']) && currentUserId !== requestUserId) {
-            Logger.info ('Has user group?', hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']));
+            Logger.info ('Has user group?' + hasGroup (currentUser.userGroups, ['admin_read', 'admin_write']));
             return response.unauthorized ();
         }
 
