@@ -3,23 +3,25 @@
 import User         from 'App/Models/User';
 import Hash         from '@ioc:Adonis/Core/Hash';
 import { DateTime } from 'luxon';
-import Logger       from '@ioc:Adonis/Core/Logger';
+import AergiaLogger from 'App/Shared/AergiaLogger';
 
 export default class UsersController {
+    public logger: AergiaLogger = new AergiaLogger ('UsersController');
+
     public async index ({ auth, request, response }) {
         let userId = auth.use ('api').user.id;
 
-        Logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
+        this.logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
 
         let user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
         if (!user) {
-            Logger.warn (`User-Index: Current user does not exist.`);
+            this.logger.warn (`User-Index: Current user does not exist.`);
             return response.unauthorized ();
         }
 
         if (!(await user.hasAdminRead ())) {
-            Logger.warn (`User-Index: Current user is not an admin user.`);
+            this.logger.warn (`User-Index: Current user is not an admin user.`);
             return response.unauthorized ('User not an admin');
         }
 
@@ -37,12 +39,6 @@ export default class UsersController {
 
     public async read ({ auth, request, response }) {
         let currentUserId = auth.use ('api').user.id;
-
-        console.log ('Basic Log');
-        console.info ('Info');
-        console.warn ('Warn');
-        console.group ('group...');
-        console.error ('error');
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
