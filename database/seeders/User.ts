@@ -9,21 +9,34 @@ export default class UserSeeder extends BaseSeeder {
 
         const password = await Hash.make ('su');
 
-        let user       = new User ();
-        user.password  = password;
-        user.email     = 'jackborrie@hotmail.com';
-        user.username  = 'jborrie';
-        user.createdAt = DateTime.now ();
-        user.updatedAt = DateTime.now ();
+        let adminUser       = new User ();
+        adminUser.password  = password;
+        adminUser.email     = 'jackborrie@hotmail.com';
+        adminUser.username  = 'jborrie';
+        adminUser.createdAt = DateTime.now ();
+        adminUser.updatedAt = DateTime.now ();
 
-        await user.save ();
+        await adminUser.save ();
 
         let groups = await Group.all ();
 
-        const groupIds = groups.filter (group => {return group.name.includes ('admin');})
-                               .map (group => {return group.id;});
+        const adminGroupIds = groups.filter (group => {return group.name.includes ('admin');})
+                                    .map (group => {return group.id;});
 
-        await user.related ('userGroups').attach (groupIds);
+        await adminUser.related ('userGroups').attach (adminGroupIds);
 
+        let basicUser       = new User ();
+        basicUser.password  = password;
+        basicUser.email     = 'jackborrie@hotmail.com';
+        basicUser.username  = 'jborrie';
+        basicUser.createdAt = DateTime.now ();
+        basicUser.updatedAt = DateTime.now ();
+
+        await basicUser.save ();
+
+        let basicGroupIds = groups.filter (group => { return group.name.includes ('basic'); })
+                                  .map (group => { return group.id; });
+
+        await basicUser.related ('userGroups').attach (basicGroupIds);
     }
 }
