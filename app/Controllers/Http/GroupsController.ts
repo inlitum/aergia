@@ -8,11 +8,11 @@ import { DateTime } from 'luxon';
 export default class GroupsController {
 
     public async index ({ auth, request, response }) {
-        let userId = auth.use ('api').user.id;
+        let userId = auth.use ('web').user.id;
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !(user.hasAdminRead ())) {
+        if (!user || !(await user.hasAdminRead ())) {
             return response.unauthorized ();
         }
 
@@ -28,11 +28,11 @@ export default class GroupsController {
     }
 
     public async create ({ auth, request, response }) {
-        let userId = auth.use ('api').user.id;
+        let userId = auth.use ('web').user.id;
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !(user.hasAdminWrite ())) {
+        if (!user || !(await user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
@@ -63,17 +63,17 @@ export default class GroupsController {
 
     public async read ({ auth, request, response }) {
 
-        let userId = auth.use ('api').user.id;
+        let userId = auth.use ('web').user.id;
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !(user.hasAdminRead ())) {
+        if (!user || !(await user.hasAdminRead ())) {
             return response.unauthorized ();
         }
 
         let groupId = request.params ().id;
 
-        let group = await Group.query ().where ('group_id', groupId).preload ('users').first ();
+        let group = await Group.query ().where ('group_id', groupId).first ();
 
         if (!group) {
             return response.notFound ();
@@ -84,11 +84,11 @@ export default class GroupsController {
 
     public async update ({ auth, request, response }) {
 
-        let userId = auth.use ('api').user.id;
+        let userId = auth.use ('web').user.id;
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !(user.hasAdminWrite ())) {
+        if (!user || !(await user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 
@@ -125,11 +125,11 @@ export default class GroupsController {
 
     public async delete ({ auth, request, response }) {
 
-        let userId = auth.use ('api').user.id;
+        let userId = auth.use ('web').user.id;
 
         const user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
-        if (!user || !(user.hasAdminWrite ())) {
+        if (!user || !(await user.hasAdminWrite ())) {
             return response.unauthorized ();
         }
 

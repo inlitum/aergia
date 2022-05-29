@@ -1,8 +1,8 @@
-import { DateTime }                                                    from 'luxon';
-import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
-import Account                                                         from 'App/Models/Account';
-import Transaction                                                     from 'App/Models/Transaction';
-import Group                                                           from 'App/Models/Group';
+import { DateTime }                                                              from 'luxon';
+import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import Account                                                                   from 'App/Models/Account';
+import Transaction                                                               from 'App/Models/Transaction';
+import Group                                                                     from 'App/Models/Group';
 
 export default class User extends BaseModel {
     @column ({ isPrimary: true, columnName: 'user_id' })
@@ -26,6 +26,8 @@ export default class User extends BaseModel {
         , pivotForeignKey:        'user_id'
         , relatedKey:             'id'
         , pivotRelatedForeignKey: 'group_id',
+        pivotTimestamps:          true,
+        serializeAs:              null,
     })
     public userGroups: ManyToMany<typeof Group>;
 
@@ -42,6 +44,19 @@ export default class User extends BaseModel {
 
     @column.dateTime ({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime;
+
+    @computed ({
+        serializeAs: 'userGroups',
+    })
+    public get generatedUserGroups (): string[] {
+        if (!this.userGroups) {
+            return [];
+        }
+
+        return this.userGroups.map (group => {
+            return group.name;
+        });
+    }
 
     public async hasAdminRead (): Promise<boolean> {
         return await this.hasGroups (['admin_read', 'admin_write']);

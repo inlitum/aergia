@@ -7,21 +7,23 @@ import Logger       from '@ioc:Adonis/Core/Logger';
 
 export default class UsersController {
 
-    public async index ({ auth, request, response }) {
-        let userId = auth.use ('api').user.id;
+    userLogger = Logger.child ({ name: 'UserController' });
 
-        Logger.info (`User-Index: Attempting to get all users using account ${ userId }`);
+    public async index ({ auth, request, response }) {
+        let userId = auth.use ('web').user.id;
+
+        this.userLogger.info (`User-Index: Attempting to get all users using account ${ userId }`);
 
         let user = await User.query ().where ('user_id', userId).preload ('userGroups').first ();
 
         if (!user) {
-            Logger.warn (`User-Index: Current user does not exist.`);
+            this.userLogger.warn (`User-Index: Current user does not exist.`);
             return response.unauthorized ();
         }
 
         if (!(await user.hasAdminRead ())) {
-            Logger.warn (`User-Index: Current user is not an admin user.`);
-            return response.unauthorized ('User not an admin');
+            this.userLogger.warn (`User-Index: Current user is not an admin user.`);
+            return response.unauthorized ();
         }
 
         // Boring old pagination stuff.
@@ -37,7 +39,7 @@ export default class UsersController {
     }
 
     public async read ({ auth, request, response }) {
-        let currentUserId = auth.use ('api').user.id;
+        let currentUserId = auth.use ('web').user.id;
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
@@ -57,11 +59,13 @@ export default class UsersController {
             return response.notFound ();
         }
 
+        await requestUser.load ('userGroups');
+
         return requestUser;
     }
 
     public async update ({ auth, request, response }) {
-        let currentUserId = auth.use ('api').user.id;
+        let currentUserId = auth.use ('web').user.id;
         let requestUserId = request.params ().id;
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
@@ -80,9 +84,9 @@ export default class UsersController {
             return response.notFound ();
         }
 
-        let email    = request.body ().input ('email');
-        let username = request.body ().input ('username');
-        let password = request.body ().input ('password');
+        let email    = request.input ('email');
+        let username = request.input ('username');
+        let password = request.input ('password');
 
         requestUser.email     = email ?? requestUser.email;
         requestUser.username  = username ?? requestUser.username;
@@ -95,11 +99,13 @@ export default class UsersController {
             return response.internalServerError (e);
         }
 
+        await requestUser.load ('userGroups');
+
         return requestUser;
     }
 
     public async delete ({ auth, request, response }) {
-        let currentUserId = auth.use ('api').user.id;
+        let currentUserId = auth.use ('web').user.id;
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
@@ -117,6 +123,12 @@ export default class UsersController {
 
         if (!requestUser) {
             return response.notFound ();
+        }
+
+        try {
+            await requestUser.related ('userGroups').detach ();
+        } catch (e) {
+            return response.internalServerError (e);
         }
 
         try {

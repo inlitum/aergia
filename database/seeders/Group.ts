@@ -11,10 +11,10 @@ export default class GroupSeeder extends BaseSeeder {
                 name: 'admin_write',
             },
             {
-                name: 'normal_read',
+                name: 'basic_read',
             },
             {
-                name: 'normal_write',
+                name: 'basic_write',
             },
         ]);
     }

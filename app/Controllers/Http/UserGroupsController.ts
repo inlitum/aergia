@@ -6,7 +6,7 @@ import Group      from 'App/Models/Group';
 
 export default class UserGroupsController {
     public async create ({ auth, request, response }) {
-        let currentUserId = auth.use ('api').user.id;
+        let currentUserId = auth.use ('web').user.id;
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
@@ -38,7 +38,7 @@ export default class UserGroupsController {
         }
 
         try {
-            user.related ('userGroups').attach (payload.groupId);
+            await user.related ('userGroups').attach ([payload.groupId]);
         } catch (e) {
             return response.internalServerError (e);
         }
@@ -47,7 +47,7 @@ export default class UserGroupsController {
     }
 
     public async delete ({ auth, request, response }) {
-        let currentUserId = auth.use ('api').user.id;
+        let currentUserId = auth.use ('web').user.id;
 
         let currentUser = await User.query ().where ('user_id', currentUserId).preload ('userGroups').first ();
 
@@ -59,27 +59,18 @@ export default class UserGroupsController {
             return response.unauthorized ();
         }
 
-        let userGroupSchema = schema.create ({
-            userId:  schema.number (),
-            groupId: schema.number (),
-        });
+        const groupId = request.headers ()[ 'group-id' ];
 
-        let payload;
-        try {
-            payload = await request.validate ({ schema: userGroupSchema });
-        } catch (e) {
-            return response.badRequest ();
-        }
-
-        let user  = await User.find (payload.userId);
-        let group = await Group.find (payload.groupId);
+        const user  = await User.find (request.headers ()[ 'user-id' ]);
+        const group = await Group.find (groupId);
 
         if (!user || !group) {
             return response.badRequest ();
         }
 
         try {
-            await user.related ('userGroups').detach (payload.groupId);
+            await user.related ('userGroups').detach (groupId);
+            console.log ('sus');
         } catch (e) {
             return response.internalServerError (e);
         }

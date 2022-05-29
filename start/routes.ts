@@ -21,7 +21,7 @@ Route.group (() => {
              Route.delete ('api/admin/users/:id', 'UsersController.delete');
              // Groups
              Route.get ('api/admin/groups', 'GroupsController.index');
-             Route.post ('api/admin/groups/:id', 'GroupsController.create');
+             Route.post ('api/admin/groups', 'GroupsController.create');
              Route.get ('api/admin/groups/:id', 'GroupsController.read');
              Route.put ('api/admin/groups/:id', 'GroupsController.update');
              Route.delete ('api/admin/groups/:id', 'GroupsController.delete');
@@ -29,7 +29,7 @@ Route.group (() => {
              Route.post ('api/admin/user-groups', 'UserGroupsController.create');
              Route.delete ('api/admin/user-groups', 'UserGroupsController.delete');
          })
-         .middleware ('auth:api');
+         .middleware ('auth:web');
 
     Route.group (() => {
         Route.post ('login', 'AuthController.login');
@@ -39,6 +39,8 @@ Route.group (() => {
     Route.get ('/', async ({ view }) => {
         return await view.render ('welcome', {});
     });
+
+    Route.get ('__status', 'StatusController.status');
 }).middleware (async ({ request }, next) => {
     Logger.info (`${ request.method () } ${ request.url () } ${ request.ip () }`);
     await next ();

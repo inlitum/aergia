@@ -3,13 +3,15 @@
 import User              from 'App/Models/User';
 import Hash              from '@ioc:Adonis/Core/Hash';
 import { rules, schema } from '@ioc:Adonis/Core/Validator';
+import Group             from 'App/Models/Group';
 
 export default class AuthController {
     public async login ({ auth, request, response }) {
         let body = request.body ();
-        
-        const email    = body.email;
-        const password = body.password;
+
+        const email      = body.email;
+        const password   = body.password;
+        const rememberMe = body[ 'remember_me' ] ?? false;
 
         if (!email || !password) {
             return response.badRequest ();
@@ -21,7 +23,9 @@ export default class AuthController {
             return response.badRequest ('Invalid credentials');
         }
 
-        return await auth.use ('api').login (user);
+        await user.load ('userGroups');
+
+        return await auth.use ('web').login (user, rememberMe);
     }
 
     public async register ({ auth, request, response }) {
@@ -56,6 +60,13 @@ export default class AuthController {
             return response.internalServerError ();
         }
 
-        return await auth.use ('api').login (user, true);
+        let basicGroupIds = (await Group.all ()).filter (group => group.name.includes ('basic'))
+                                                .map (group => group.id);
+
+        await user.related ('userGroups').attach (basicGroupIds);
+
+        await user.load ('userGroups');
+
+        return await auth.use ('web').login (user);
     }
 }
