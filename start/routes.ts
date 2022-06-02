@@ -40,7 +40,8 @@ Route.group (() => {
         return await view.render ('welcome', {});
     });
 
-    Route.get ('__status', 'StatusController.status');
+    Route.get ('api/__status', 'StatusController.status');
+    
 }).middleware (async ({ request }, next) => {
     Logger.info (`${ request.method () } ${ request.url () } ${ request.ip () }`);
     await next ();
