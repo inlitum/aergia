@@ -12,7 +12,7 @@ export default class UserSeeder extends BaseSeeder {
         let adminUser       = new User ();
         adminUser.password  = password;
         adminUser.email     = 'jackborrie@hotmail.com';
-        adminUser.username  = 'jborrie';
+        adminUser.username  = 'jborrie_admin';
         adminUser.createdAt = DateTime.now ();
         adminUser.updatedAt = DateTime.now ();
 
@@ -27,8 +27,8 @@ export default class UserSeeder extends BaseSeeder {
 
         let basicUser       = new User ();
         basicUser.password  = password;
-        basicUser.email     = 'jackborrie@hotmail.com';
-        basicUser.username  = 'jborrie';
+        basicUser.email     = 'jborrie@hotmail.com';
+        basicUser.username  = 'jborrie_normal';
         basicUser.createdAt = DateTime.now ();
         basicUser.updatedAt = DateTime.now ();
 

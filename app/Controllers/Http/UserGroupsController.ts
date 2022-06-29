@@ -3,6 +3,7 @@
 import User       from 'App/Models/User';
 import { schema } from '@ioc:Adonis/Core/Validator';
 import Group      from 'App/Models/Group';
+import Database from '@ioc:Adonis/Lucid/Database';
 
 export default class UserGroupsController {
     public async create ({ auth, request, response }) {
@@ -19,8 +20,8 @@ export default class UserGroupsController {
         }
 
         let userGroupSchema = schema.create ({
-            userId:  schema.number (),
-            groupId: schema.number (),
+            "user_id":  schema.number (),
+            "group_id": schema.number (),
         });
 
         let payload;
@@ -30,15 +31,17 @@ export default class UserGroupsController {
             return response.badRequest ();
         }
 
-        let user  = await User.find (payload.userId);
-        let group = await Group.find (payload.groupId);
+        let user  = await User.find (payload['user_id']);
+        let group = await Group.find (payload['group_id']);
+
+        console.log(user, group)
 
         if (!user || !group) {
             return response.badRequest ();
         }
 
         try {
-            await user.related ('userGroups').attach ([payload.groupId]);
+            await user.related ('userGroups').attach ([payload['group_id']]);
         } catch (e) {
             return response.internalServerError (e);
         }
@@ -59,20 +62,21 @@ export default class UserGroupsController {
             return response.unauthorized ();
         }
 
-        const groupId = request.headers ()[ 'group-id' ];
+        const groupId = request.headers ()[ 'group_id' ];
+        const userId = request.headers ()[ 'user_id' ];
 
-        const user  = await User.find (request.headers ()[ 'user-id' ]);
+        const user  = await User.find (userId);
         const group = await Group.find (groupId);
 
         if (!user || !group) {
-            return response.badRequest ();
+            return response.notFound ();
         }
 
         try {
-            await user.related ('userGroups').detach (groupId);
-            console.log ('sus');
+            await Database.from('user_groups').delete().where('user_id', userId).where('group_id', groupId);
         } catch (e) {
-            return response.internalServerError (e);
+            console.log(e)
+            return response.internalServerError ();
         }
 
         return response.ok ();
