@@ -1,21 +1,15 @@
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder';
-import Group      from 'App/Models/Group';
+import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import Group      from "App/Models/Group";
 
-export default class GroupSeeder extends BaseSeeder {
-    public async run () {
-        await Group.createMany ([
-            {
-                name: 'admin_read',
-            },
-            {
-                name: 'admin_write',
-            },
-            {
-                name: 'basic_read',
-            },
-            {
-                name: 'basic_write',
-            },
-        ]);
-    }
+export default class extends BaseSeeder {
+  public async run() {
+
+    let adminGroup       = new Group();
+    adminGroup.groupName = "admin"
+
+    let accountGroup       = new Group();
+    accountGroup.groupName = "accounts";
+
+    await adminGroup.save();
+  }
 }

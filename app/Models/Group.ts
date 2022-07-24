@@ -1,26 +1,15 @@
-import { DateTime }                                  from 'luxon';
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
-import User                                          from 'App/Models/User';
+import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Group extends BaseModel {
-    @column ({ isPrimary: true, columnName: 'group_id' })
-    public id: number;
+  @column({ isPrimary: true, columnName: "group_id" })
+  public id: number
 
-    @column ()
-    public name: string;
+  @column()
+  public groupName: string;
 
-    @manyToMany (() => User, {
-        pivotTable:             'user_groups',
-        localKey:               'id',
-        pivotForeignKey:        'group_id',
-        relatedKey:             'id',
-        pivotRelatedForeignKey: 'user_id'
-    })
-    public users: ManyToMany<typeof User>;
+  @column()
+  public parentGroupId: number;
 
-    @column.dateTime ({ autoCreate: true })
-    public createdAt: DateTime;
-
-    @column.dateTime ({ autoCreate: true, autoUpdate: true })
-    public updatedAt: DateTime;
+  @hasOne(() => Group)
+  public parentGroup: HasOne<typeof Group>
 }
