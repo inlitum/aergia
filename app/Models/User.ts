@@ -1,89 +1,101 @@
-import { DateTime }                                                              from 'luxon';
-import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
-import Account                                                                   from 'App/Models/Account';
-import Transaction                                                               from 'App/Models/Transaction';
-import Group                                                                     from 'App/Models/Group';
+import { column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm';
+import BaseAergiaModel                    from 'App/Models/BaseAergiaModel';
+import Group                              from 'App/Models/Group';
 
-export default class User extends BaseModel {
-    @column ({ isPrimary: true, columnName: 'user_id' })
+export default class User extends BaseAergiaModel {
+    @column( { isPrimary: true, columnName: 'user_id' } )
     public id: number;
 
-    @column ()
+    @column()
     public username: string;
 
-    @column ()
+    @column()
     public email: string;
 
-    @column ({ serializeAs: null })
+    @column( { serializeAs: null } )
     public password: string;
 
-    @column ()
+    @column()
     public rememberMeToken: string;
 
-    @manyToMany (() => Group, {
-        pivotTable:               'user_groups'
-        , localKey:               'id'
-        , pivotForeignKey:        'user_id'
-        , relatedKey:             'id'
-        , pivotRelatedForeignKey: 'group_id',
-        pivotTimestamps:          true,
-        serializeAs:              null,
-    })
-    public userGroups: ManyToMany<typeof Group>;
+    @manyToMany( () => Group, {
+        localKey              : 'id',
+        pivotForeignKey       : 'user_id',
+        relatedKey            : 'id',
+        pivotRelatedForeignKey: 'group_id',
+        pivotTable            : 'user_groups',
+        pivotColumns          : [ 'read', 'write' ],
+    } )
+    public groups: ManyToMany<typeof Group>
 
-    @manyToMany (() => Account, {
-        pivotTable: 'user_accounts',
-    })
-    public accounts: ManyToMany<typeof Account>;
+    public hasAdminRead (): boolean {
+        return this.hasAtLeastOneGroup( [ 'admin_read', 'admin_write' ] );
+    }
 
-    @hasMany (() => Transaction, {})
-    public transactions: HasMany<typeof Transaction>;
+    public hasAdminWrite (): boolean {
+        return this.hasGroup( 'admin_write' );
+    }
 
-    @column.dateTime ({ autoCreate: true })
-    public createdAt: DateTime;
-
-    @column.dateTime ({ autoCreate: true, autoUpdate: true })
-    public updatedAt: DateTime;
-
-    @computed ({
-        serializeAs: 'userGroups',
-    })
-    public get generatedUserGroups (): string[] {
-        if (!this.userGroups) {
-            return [];
+    private getGroup ( groupName: string ): Group | null {
+        if ( !this.groups ) {
+            return null;
         }
-
-        return this.userGroups.map (group => {
-            return group.name;
-        });
+        for ( let i = 0; i < this.groups.length; i++ ) {
+            if ( this.groups[i].groupName === groupName ) {
+                return this.groups[i];
+            }
+        }
+        return null;
     }
 
-    public async hasAdminRead (): Promise<boolean> {
-        return await this.hasGroups (['admin_read', 'admin_write']);
-    }
+    public hasWriteGroup ( groupName: string ): boolean {
+        const group = this.getGroup( groupName );
 
-    public async hasAdminWrite (): Promise<boolean> {
-        return await this.hasGroup ('admin_write');
-    }
-
-    public async hasGroup (group: string): Promise<boolean> {
-        if (!this.userGroups) {
+        if ( !group ) {
             return false;
         }
-        for (let i = 0; i < this.userGroups.length; i++) {
-            if (this.userGroups[ i ].name === group) {
+
+        return group.$extras.pivot_write;
+    }
+
+    public hasReadGroup ( groupName: string ): boolean {
+        const group = this.getGroup( groupName );
+
+        if ( !group ) {
+            return false;
+        }
+
+        return group.$extras.pivot_read;
+    }
+
+    public hasGroup ( groupName: string ): boolean {
+        if ( groupName.endsWith( '_write' ) ) {
+            return this.hasWriteGroup( groupName.replace( '_write', '' ) );
+        }
+
+        if ( groupName.endsWith( '_read' ) ) {
+            return this.hasWriteGroup( groupName.replace( '_read', '' ) );
+        }
+
+        return this.getGroup( groupName ) !== null;
+    }
+
+    public hasAtLeastOneGroup ( groups: string[] ): boolean {
+        for ( let i = 0; i < groups.length; i++ ) {
+            if ( this.hasGroup( groups[i] ) ) {
                 return true;
             }
         }
+
         return false;
     }
 
-    public async hasGroups (groups: string[]): Promise<boolean> {
-        for (let i = 0; i < groups.length; i++) {
-            if (await this.hasGroup (groups[ i ])) {
-                return true;
+    public hasAllGroups ( groups: string[] ): boolean {
+        for ( let i = 0; i < groups.length; i++ ) {
+            if ( !this.hasGroup( groups[i] ) ) {
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }

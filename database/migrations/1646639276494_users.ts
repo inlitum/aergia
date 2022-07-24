@@ -1,27 +1,20 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema';
+import BaseAergiaSchema from 'Database/BaseAergiaSchema';
 
-export default class Users extends BaseSchema {
-    protected tableName = 'users';
-
+export default class Users extends BaseAergiaSchema {
     public async up () {
-        this.schema.createTable (this.tableName, (table) => {
-            table.increments ('user_id').primary ();
+        this.schema.createTable( this.getTableName(), ( table ) => {
+            table.increments( 'user_id' ).primary();
             // Account Login stuff
-            table.string ('email', 255).notNullable ();
-            table.string ('password', 180).notNullable ();
-            table.string ('remember_me_token').nullable ();
+            table.string( 'email' ).notNullable();
+            table.string( 'password' ).notNullable();
+            table.string( 'remember_me_token' ).nullable();
             // Personalization stuff
-            table.string ('username');
-            table.integer ('level');
-            /**
-             * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-             */
-            table.timestamp ('created_at', { useTz: true });
-            table.timestamp ('updated_at', { useTz: true });
-        });
+            table.string( 'username' ).notNullable();
+        } );
+        await super.up();
     }
 
-    public async down () {
-        this.schema.dropTable (this.tableName);
+    protected getTableName (): string {
+        return 'users';
     }
 }
