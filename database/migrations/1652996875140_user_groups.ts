@@ -1,7 +1,7 @@
-import BaseAergiaSchema from "Database/BaseAergiaSchema";
+import BaseAergiaSchema from 'Database/BaseAergiaSchema';
 
 export default class UserGroups extends BaseAergiaSchema {
-    public async up() {
+    public async up () {
         this.schema.createTable( this.getTableName(), ( table ) => {
             table.integer( 'user_id' ).unsigned();
             table.integer( 'group_id' ).unsigned();
@@ -9,13 +9,13 @@ export default class UserGroups extends BaseAergiaSchema {
             table.boolean( 'write' ).defaultTo( false );
 
             table.primary( [ 'user_id', 'group_id' ] );
-            table.foreign( 'user_id' ).references( 'user_id' ).inTable( 'users' );
-            table.foreign( 'group_id' ).references( 'group_id' ).inTable( 'groups' );
+            table.foreign( 'user_id' ).references( 'user_id' ).inTable( 'users' ).onDelete( 'CASCADE' );
+            table.foreign( 'group_id' ).references( 'group_id' ).inTable( 'groups' ).onDelete( 'CASCADE' );
         } );
         await super.up();
     }
 
-    protected getTableName(): string {
-        return "user_groups";
+    protected getTableName (): string {
+        return 'user_groups';
     }
 }

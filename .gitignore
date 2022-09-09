@@ -1,8 +1,4 @@
-node_modules
-build
-coverage
-.vscode
-.DS_STORE
-.env
-tmp
-.idea
+/node_modules/
+/.env
+/bun.lockb
+/.idea/

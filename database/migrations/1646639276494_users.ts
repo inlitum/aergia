@@ -5,11 +5,11 @@ export default class Users extends BaseAergiaSchema {
         this.schema.createTable( this.getTableName(), ( table ) => {
             table.increments( 'user_id' ).primary();
             // Account Login stuff
-            table.string( 'email' ).notNullable();
+            table.string( 'email' ).notNullable().unique();
             table.string( 'password' ).notNullable();
             table.string( 'remember_me_token' ).nullable();
             // Personalization stuff
-            table.string( 'username' ).notNullable();
+            table.string( 'username' ).notNullable().unique();
         } );
         await super.up();
     }

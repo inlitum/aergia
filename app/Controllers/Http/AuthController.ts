@@ -5,21 +5,23 @@ import Hash              from '@ioc:Adonis/Core/Hash';
 import { rules, schema } from '@ioc:Adonis/Core/Validator';
 
 export default class AuthController {
-    public async login ({ auth, request, response }) {
-        let body = request.body ();
+    public async login ( { auth, request, response } ) {
+        let body = request.body();
+
+
 
         const email      = body.email;
         const password   = body.password;
-        const rememberMe = body[ 'remember_me' ] ?? false;
+        const rememberMe = body['remember_me'] ?? false;
 
-        if (!email || !password) {
-            return response.badRequest ();
+        if ( !email || !password ) {
+            return response.badRequest();
         }
 
-        const user = await User.query ().where ('email', email).firstOrFail ();
+        const user = await User.query().where( 'email', email ).firstOrFail();
 
-        if (!(await Hash.verify (user.password, password))) {
-            return response.badRequest ('Invalid credentials');
+        if ( !( await Hash.verify( user.password, password ) ) ) {
+            return response.badRequest( 'Invalid credentials' );
         }
 
         // await user.load ('userGroups');
@@ -27,45 +29,57 @@ export default class AuthController {
         return await auth.use ('web').login (user, rememberMe);
     }
 
-    public async register ({ auth, request, response }) {
-        const registrationScheme = schema.create ({
-            username: schema.string ({}, [
-                rules.minLength (6),
-                rules.unique ({ table: 'users', column: 'username' }),
-            ]),
-            email:    schema.string ({}, [rules.email (), rules.unique ({ table: 'users', column: 'email' })]),
-            password: schema.string ({}, []),
-        });
+    public async register ( { auth, request, response } ) {
+        const registrationScheme = schema.create( {
+                                                      username: schema.string( {}, [
+                                                          rules.minLength( 6 ),
+                                                          rules.unique( { table: 'users', column: 'username' } ),
+                                                      ] ),
+                                                      email   : schema.string( {}, [ rules.email(), rules.unique( {
+                                                                                                                      table : 'users',
+                                                                                                                      column: 'email',
+                                                                                                                  } ) ] ),
+                                                      password: schema.string( {}, [] ),
+                                                  } );
 
         let payload;
         try {
-            payload = await request.validate ({
-                schema: registrationScheme,
-            });
-        } catch (e) {
-            return response.badRequest (e);
+            payload = await request.validate( {
+                                                  schema: registrationScheme,
+                                              } );
+        } catch ( e ) {
+            return response.badRequest( e );
         }
 
-        let password = await Hash.make (payload.password);
+        let password = await Hash.make( payload.password );
 
-        const user    = new User ();
+        const user    = new User();
         user.email    = payload.email;
         user.username = payload.username;
         user.password = password;
 
         try {
-            await user.save ();
+            await user.save();
         } catch {
-            return response.internalServerError ();
+            return response.internalServerError();
         }
 
-        // let basicGroupIds = (await Group.all ()).filter (group => group.name.includes ('basic'))
-        //                                         .map (group => group.id);
+        return await auth.use( 'web' ).login( user );
+    }
 
-        // await user.related ('userGroups').attach (basicGroupIds);
-        //
-        // await user.load ('userGroups');
+    public async logout ( { auth, response } ) {
+        await auth.use('web').authenticate();
 
-        return await auth.use ('web').login (user);
+        let userId = auth.use('web').user.id;
+
+        if (userId == null) {
+            return response.unauthorized();
+        }
+
+        return await auth.logout ();
+    }
+
+    async sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time))
     }
 }

@@ -1,6 +1,7 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Group      from 'App/Models/Group';
 import User       from 'App/Models/User';
+import UserGroup  from 'App/Models/UserGroup';
 
 export default class extends BaseSeeder {
     public async run () {
@@ -13,12 +14,15 @@ export default class extends BaseSeeder {
             return;
         }
 
-        await adminUser.related( 'groups' ).attach( {
-                                                        [adminGroup.id]: {
-                                                            read : false,
-                                                            write: true,
-                                                        },
-                                                    } )
+        let userGroup          = new UserGroup()
+        userGroup.groupId      = adminGroup.id;
+        userGroup.userId       = adminUser.id;
+        userGroup.read         = true;
+        userGroup.write        = true;
+        userGroup.creationUser = 'seeder';
+        userGroup.updateUser   = 'seeder';
+
+        await userGroup.save();
 
     }
 
