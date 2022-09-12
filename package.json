@@ -28,7 +28,6 @@
     "@adonisjs/session": "^6.4.0",
     "@adonisjs/shield": "^7.0.11",
     "@adonisjs/view": "^6.1.6",
-    "argon2": "^0.29.1",
     "colors": "^1.4.0",
     "lodash": "^4.17.21",
     "luxon": "^2.5.0",

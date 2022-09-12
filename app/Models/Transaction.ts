@@ -1,13 +1,20 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { column, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm';
+import BaseAergiaModel            from 'App/Models/BaseAergiaModel';
+import Account            from 'App/Models/Account';
 
-export default class Transaction extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number
+export default class Transaction extends BaseAergiaModel {
+    @column ({ isPrimary: true })
+    public transactionId: number;
 
-  @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+    @column()
+    public accountId: number;
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+    @column()
+    public description: string;
+
+    @column()
+    public amount: number;
+
+    @hasOne(() => Account)
+    public account: HasOne<typeof Account>;
 }
