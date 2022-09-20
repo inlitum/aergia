@@ -45,6 +45,13 @@ Route.group( () => {
         Route.put('api/tags/:id', 'TagsController.update');
         Route.delete('api/tags/:id', 'TagsController.delete');
 
+        // Accounts
+        Route.get('api/transactions', 'TransactionsController.index');
+        Route.get('api/transactions/:transaction-id', 'TransactionsController.read');
+        Route.post('api/transactions', 'TransactionsController.create');
+        Route.put('api/transactions/:transaction-id', 'TransactionsController.update');
+        Route.delete('api/transactions/:transaction-id', 'TransactionsController.delete');
+
         Route.post( 'api/auth/logout', 'AuthController.logout' );
         Route.get( 'api/__status', 'StatusController.status' );
     })
