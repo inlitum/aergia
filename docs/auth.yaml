@@ -1,0 +1,65 @@
+components:
+  schemas:
+    EmailProperty:
+      properties:
+        email:
+          type: string
+          required: true
+          example: "john@doe.com"
+          description: >
+            The unique email assigned to an user account.
+    UsernameProperty:
+      properties:
+        username:
+          type: string
+          required: true
+          example: JohnDoe
+          description: >
+            The unique username for an user account.
+    PasswordProperty:
+      properties:
+        password:
+          type: string
+          required: true
+          example: j0hnd03
+          description: >
+            The password used to login to an user's account.
+    RememberMeTokenProperty:
+      properties:
+        rememberMeToken:
+          type: string
+          required: false
+          example: idk
+          description: >
+            IDK
+
+    LoginRequest:
+      properties:
+        $ref: "#components/schemas/EmailProperty"
+
+LoginRoute:
+  post:
+    summary: Logins in
+    tags:
+      - Auth
+    description: >
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: bearer
+                  default: bearer
+                token:
+                  type: string

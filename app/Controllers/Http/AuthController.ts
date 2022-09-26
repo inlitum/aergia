@@ -3,12 +3,14 @@
 import User              from 'App/Models/User';
 import Hash              from '@ioc:Adonis/Core/Hash';
 import { rules, schema } from '@ioc:Adonis/Core/Validator';
+import Logger from "@ioc:Adonis/Core/Logger";
 
 export default class AuthController {
+
+    authController = Logger.child ({ name: 'AuthenticationController' });
+
     public async login ( { auth, request, response } ) {
         let body = request.body();
-
-
 
         const email      = body.email;
         const password   = body.password;
@@ -20,7 +22,15 @@ export default class AuthController {
 
         const user = await User.query().where( 'email', email ).firstOrFail();
 
-        if ( !( await Hash.verify( user.password, password ) ) ) {
+        let validPassword = false;
+        try {
+            validPassword = await Hash.verify( user.password, password );
+        } catch (e) {
+            this.authController.error('Test');
+            return response.internalServerError(e);
+        }
+
+        if ( !validPassword ) {
             return response.badRequest( 'Invalid credentials' );
         }
 

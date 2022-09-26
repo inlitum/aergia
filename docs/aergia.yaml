@@ -4,18 +4,13 @@ info:
   description: >
     Aergia, the Greek mythological personification of sloth.<br>
     <br>
-    Backend to the sloth gui.<br>
+    Backend to the sloth gui.
+    <br>
   version: 1.0.0
 servers:
   - url: 'https://api.inlitum.dev'
 
 components:
-  securitySchemes:
-    Bearer Auth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   schemas:
     EmailProperty:
       properties:
@@ -50,31 +45,7 @@ components:
 
 paths:
   /login:
-    post:
-      summary: Logins in
-      tags:
-        - Auth
-      description: >
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type:
-                    type: string
-                    example: bearer
-                    default: bearer
-                  token:
-                    type: string
+    $ref: "auth.yaml#/LoginRoute"
   /register:
     post:
       summary: Registers a new user
