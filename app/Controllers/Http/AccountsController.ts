@@ -189,7 +189,7 @@ export default class AccountsController {
         try {
             payload = await request.validate ({ schema: accountSchema });
         } catch (e) {
-            this.accountsLogger.warn ('TODO');
+            this.accountsLogger.warn (e);
             return response.badRequest (e);
         }
 
